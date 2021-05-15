@@ -1,67 +1,92 @@
 <template>
   <div class="container">
-    <h1><Header title="Task Tracker" /></h1>
-    <Tasks 
-    @delete-task="deleteTask"
-    @toggle-reminder= "toggleReminder"
-    :tasks="tasks" />
+    <h1>
+      <Header 
+      @toggle-add-task="toggleAddTask" 
+      title="Task Tracker"
+      :showAddTask="showAddTask" 
+      />
+      </h1>
+    <div v-if="showAddTask">
+      <AddTask @add-task="addTask" />
+    </div>
+    <Tasks
+      @delete-task="deleteTask"
+      @toggle-reminder="toggleReminder"
+      :tasks="tasks"
+    />
   </div>
 </template>
 
 <script>
-import Header from './components/Header';
-import Tasks from './components/Tasks'
+import Header from "./components/Header";
+import AddTask from "./components/AddTask";
+import Tasks from "./components/Tasks";
 export default {
   name: "App",
   components: {
     Header,
-    Tasks
+    Tasks,
+    AddTask,
   },
   data() {
     return {
       tasks: [],
-    }
+      showAddTask: false,
+    };
   },
   methods: {
+    toggleAddTask() {
+      this.showAddTask = !this.showAddTask;
+    },
+    addTask(task) {
+      this.tasks = [...this.tasks, task];
+    },
     deleteTask(id) {
-      if(confirm('Are you sure?')) {
-        this.tasks = this.tasks.filter((task) => task.id !== id )
+      if (confirm("Are you sure?")) {
+        this.tasks = this.tasks.filter((task) => task.id !== id);
       }
     },
     toggleReminder(id) {
-      this.tasks = this.tasks.map((task)=> task.id === id 
-      ? {...task, reminder: !task.reminder} : task)
+      this.tasks = this.tasks.map((task) =>
+        task.id === id ? { ...task, reminder: !task.reminder } : task
+      );
     },
   },
   created() {
     this.tasks = [
       {
         id: 1,
-        text: 'Doc Appointment',
+        text: "Doc Appointment",
+        day: "May 15th at 2:30pm",
         reminder: true,
-      },{
+      },
+      {
         id: 2,
-        text: 'School Meeting',
+        text: "Work Meeting",
+        day: "May 17th at 9:00am",
         reminder: true,
-      },{
+      },
+      {
         id: 3,
-        text: 'Go to the Bar',
+        text: "Go to the Bar",
+        day: "May 20th at 1:30pm",
         reminder: false,
       },
-    ]
-  }
+    ];
+  },
 };
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap");
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 .container {
   max-width: 500px;
