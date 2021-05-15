@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <h1>
-      <Header 
-      @toggle-add-task="toggleAddTask" 
-      title="Task Tracker"
-      :showAddTask="showAddTask" 
+      <Header
+        @toggle-add-task="toggleAddTask"
+        title="Task Tracker"
+        :showAddTask="showAddTask"
       />
-      </h1>
+    </h1>
     <div v-if="showAddTask">
       <AddTask @add-task="addTask" />
     </div>
@@ -39,17 +39,16 @@ export default {
     toggleAddTask() {
       this.showAddTask = !this.showAddTask;
     },
-  async addTask(task) {
-    const response = await fetch('http://localhost:5000/tasks', { 
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-       body: JSON.stringify(task)
-    })
+    async addTask(task) {
+      const response = await fetch("http://localhost:5000/tasks", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(task),
+      });
 
-      const data = await res.json()
-
+      const data = await res.json();
       this.tasks = [...this.tasks, data];
     },
     deleteTask(id) {
@@ -64,29 +63,25 @@ export default {
     },
     async fetchTasks() {
       try {
-      const response = await fetch('http://localhost:5000/tasks')
-      const data = await response.json()
-      return data
+        const response = await fetch("http://localhost:5000/tasks");
+        const data = await response.json();
+        return data;
+      } catch (err) {
+        console.log(`couldnt fetch : ${err}`);
       }
-      catch(err) {
-        console.log(`couldnt fetch : ${err}`)
-      }
-      
     },
     async fetchTask() {
       try {
-      const response = await fetch(`http://localhost:5000/tasks/${id}`)
-      const data = await response.json()
-      return data
+        const response = await fetch(`http://localhost:5000/tasks/${id}`);
+        const data = await response.json();
+        return data;
+      } catch (err) {
+        console.log(`couldnt fetch : ${err}`);
       }
-      catch(err) {
-        console.log(`couldnt fetch : ${err}`)
-      }
-      
     },
   },
- async created() {
-    this.tasks = await this.fetchTasks()
+  async created() {
+    this.tasks = await this.fetchTasks();
   },
 };
 </script>
