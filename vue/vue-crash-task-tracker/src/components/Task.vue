@@ -1,29 +1,25 @@
 <template>
-    <div :class="[task.reminder ? 'reminder' : '', 'task']">
-        <h3>
-            {{task.text}}
-        <i @click="onDelete(task.id)" class="fas fa-times"></i>
-        </h3>
-        <p>{{task.day}}</p>
-    </div>
+  <div
+    @dblclick="$emit('toggle-reminder', task.id)"
+    :class="[task.reminder ? 'reminder' : '', 'task']"
+  >
+    <h3>
+      {{ task.text }}
+      <i @click="$emit('delete-task', task.id)" class="fas fa-times"> </i>
+    </h3>
+    <p>{{ task.day }}</p>
+  </div>
 </template>
 <script>
 export default {
-    name: 'Task',
-    props: {
-        task: Object
-    },
-    methods: {
-        onDelete(id) {
-            //emitting upwards into app.vue with custom event called here delete-task
-            // with also id as parameter
-            this.$emit('delete-task', id)
-        }
-    }
-}
+  name: "Task",
+  props: {
+    task: Object,
+  },
+};
 </script>
 <style scoped>
-    .fas {
+.fas {
   color: red;
 }
 .task {
