@@ -39,8 +39,18 @@ export default {
     toggleAddTask() {
       this.showAddTask = !this.showAddTask;
     },
-    addTask(task) {
-      this.tasks = [...this.tasks, task];
+  async addTask(task) {
+    const response = await fetch('http://localhost:5000/tasks', { 
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+       body: JSON.stringify(task)
+    })
+
+      const data = await res.json()
+
+      this.tasks = [...this.tasks, data];
     },
     deleteTask(id) {
       if (confirm("Are you sure?")) {
@@ -52,28 +62,31 @@ export default {
         task.id === id ? { ...task, reminder: !task.reminder } : task
       );
     },
+    async fetchTasks() {
+      try {
+      const response = await fetch('http://localhost:5000/tasks')
+      const data = await response.json()
+      return data
+      }
+      catch(err) {
+        console.log(`couldnt fetch : ${err}`)
+      }
+      
+    },
+    async fetchTask() {
+      try {
+      const response = await fetch(`http://localhost:5000/tasks/${id}`)
+      const data = await response.json()
+      return data
+      }
+      catch(err) {
+        console.log(`couldnt fetch : ${err}`)
+      }
+      
+    },
   },
-  created() {
-    this.tasks = [
-      {
-        id: 1,
-        text: "Doc Appointment",
-        day: "May 15th at 2:30pm",
-        reminder: true,
-      },
-      {
-        id: 2,
-        text: "Work Meeting",
-        day: "May 17th at 9:00am",
-        reminder: true,
-      },
-      {
-        id: 3,
-        text: "Go to the Bar",
-        day: "May 20th at 1:30pm",
-        reminder: false,
-      },
-    ];
+ async created() {
+    this.tasks = await this.fetchTasks()
   },
 };
 </script>
